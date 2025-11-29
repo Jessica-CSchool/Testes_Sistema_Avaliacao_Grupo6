@@ -25,8 +25,7 @@ class WithdrawlPage(BasePage):
 
     def get_required_validation_message(self, timeout=10) -> str:
         """
-        Valida a mensagem nativa do browser para campo required.
-        Ex.: PT-BR: 'Preencha este campo.'
+        Mensagem 'Preencha este campo precisa ser mostrada caso o usuário não preencha'
         """
         self.wait_loaded(timeout)
         input_el = WebDriverWait(self.driver, timeout).until(
