@@ -13,7 +13,20 @@ class Test1:
         customer_home = CustomerHomePage(home_pg.driver)
         customer_home.wait_loaded()
 
-        assert customer_home.get_welcome_name() == "Albus Dumbledore"
-        assert customer_home.is_tabs_visible() is True
-        assert customer_home.get_selected_account_number() != ""
-        assert customer_home.get_balance() >= 0
+        balance_before = customer_home.get_balance()
+
+        deposit_page = customer_home.go_to_deposit()
+        deposit_amount = 10
+        deposit_page.deposit(deposit_amount)
+
+        deposit_page.wait_success_message("Deposit Successful")
+
+        balance_after = customer_home.get_balance()
+
+        assert balance_after > balance_before, f"Balance não aumentou. Antes: {balance_before} | Depois: {balance_after}"
+
+
+        
+
+
+   
