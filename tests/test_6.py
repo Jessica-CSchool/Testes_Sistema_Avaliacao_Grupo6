@@ -22,11 +22,9 @@ class Test6:
         assert customers_pg.is_url_customers(), 'URL incorreta'
 
         customers_pg.filter_customer('Ron')
-        customers_pg.filtered_item_is_visible('Ron')
+        assert customers_pg.filtered_item_is_visible('Ron'), 'Customer was not found'
 
         customers_pg.click_delete_customer()
-        time.sleep(4)
 
         customers_pg.filter_customer('Ron')
         assert customers_pg.filtered_item_is_not_visible('Ron'), 'Customer was not deleted'
-        time.sleep(4)

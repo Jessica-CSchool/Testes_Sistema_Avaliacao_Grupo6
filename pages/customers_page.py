@@ -8,7 +8,8 @@ class CustomersPage(BasePage):
     url_bank_manager_customers = 'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/list'
     search_input = (By.CSS_SELECTOR, "input[placeholder='Search Customer']")
     delete_button = (By.CSS_SELECTOR, "button[ng-click='deleteCust(cust)']")
-    #filtered_td_item = (By.CSS_SELECTOR, "input[placeholder='Filter Customers']")
+    TABLE_ROWS = (By.CSS_SELECTOR, "table.table tbody tr")
+    row_filtered = (By.CSS_SELECTOR, "td")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -25,22 +26,30 @@ class CustomersPage(BasePage):
     def click_delete_customer(self):
         self.driver.find_element(*self.delete_button).click()
 
-    def filtered_item_is_visible(self,customer):
-        xpath_table = f"//tbody//td[normalize-space()='{customer}']"
-        try:
-            self.wait.until(EC.visibility_of_element_located((By.XPATH, xpath_table)))
-            return True
-        except:
-            return False
+    def _get_visible_rows(self):
+        return self.driver.find_elements(*self.TABLE_ROWS)
 
-    def filtered_item_is_not_visible(self,customer):
-        xpath_table = f"//tbody//td[normalize-space()='{customer}']"
-        try:
-            self.wait.until(EC.invisibility_of_element_located((By.XPATH, xpath_table)))
+    def filtered_item_is_visible(self, first_name: str) -> bool:
+        rows = self._get_visible_rows()
+        for row in rows:
+            cols = row.find_elements(*self.row_filtered)
+            if not cols:
+                continue
+            if cols[0].text.strip() == first_name:
+                return True
+        return False
+
+    def filtered_item_is_not_visible(self, first_name: str) -> bool:
+        def gone(d):
+            rows = self._get_visible_rows()
+            for row in rows:
+                cols = row.find_elements(*self.row_filtered)
+                if cols and cols[0].text.strip() == first_name:
+                    return False
             return True
-        except:
-            return False
+
+        WebDriverWait(self.driver, 10).until(gone)
+        return True
 
     def is_url_customers(self):
-        #return self.is_url(self.url_bank_manager_add_customer)
         return self.wait.until(EC.url_contains('list'))
