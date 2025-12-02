@@ -7,7 +7,7 @@ Script de testes em Python - Selenium contendo 6 casos de testes.
 
 ## 🚀 Testes
 * 1. CT-001 - Realizar depósito com valor válido
-* 2. CT-002 - Saque bem-sucedido
+* 2. CT-002 - Tentar realizar saque sem informar valor
 * 3. CT-003 - Seleção de Account no dropdown (apenas validar que troca)
 * 4. CT-004 - Criar um novo Customer com sucesso
 * 5. CT-005 - Abrir uma nova conta com sucesso
